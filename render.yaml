@@ -2,7 +2,27 @@ services:
   - type: worker
     name: discord-bot
     plan: free
+    runtime: python
     buildCommand: "pip install -r requirements.txt"
     startCommand: "python BOT.py"
-    runtime: python
-
+    envVars:
+      # ── Required (set via the Render dashboard; never commit secrets) ──
+      - key: BOT_TOKEN            # Discord application token
+        sync: false
+      - key: APPWRITE_API_KEY     # API key with databases read/write scopes
+        sync: false
+      - key: APPWRITE_ENDPOINT
+        value: https://appwrite.alibks.dev/v1
+      - key: APPWRITE_PROJECT_ID
+        value: robotics-ops
+      - key: APPWRITE_DATABASE_ID
+        value: robotics_ops
+      # ── Optional ──
+      - key: GUILD_ID             # Set for instant slash sync (dev/testing)
+        sync: false
+      - key: PORT                 # KeepAlive web server is the ping target
+        value: 8080
+      # Channel/role names default in config.py — override here if renamed.
+      # CHANNEL_RULES, CHANNEL_WELCOME, CHANNEL_GOODBYE, CHANNEL_VERIFICATION,
+      # CHANNEL_ANNOUNCEMENTS, CHANNEL_DASHBOARD, CHANNEL_BOTLOG,
+      # ROLE_TEMP, ROLE_VERIFIED, ROLE_MEMBER, PREFIX, DASHBOARD_REFRESH_SECONDS

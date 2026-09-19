@@ -1,5 +1,17 @@
-discord.py==2.4.0
+# [voice] pulls PyNaCl + davey; davey is required for Discord's DAVE/E2EE
+# voice protocol, which has been mandatory since March 2026.
+discord.py[voice]==2.7.1
+# audioop was removed from the stdlib in Python 3.13; discord.py needs this shim.
+audioop-lts==0.2.2; python_version >= "3.13"
 Flask==3.1.0
 python-dotenv==1.0.1
 python_dateutil==2.9.0.post0
-pytz==2024.2
+appwrite==24.0.0
+# AES-256-GCM for the mc-link credential handoff (CipherBox, shared with the
+# Paper plugin: AAD = username).
+cryptography==50.0.1
+# Bump often: YouTube breaks older extractors, so keep this reasonably current.
+yt-dlp==2026.8.19
+# YTMusic powers query search and the /queue auto radio (yt-dlp's ytsearch is
+# bot-detected and unreliable).
+ytmusicapi==1.12.3

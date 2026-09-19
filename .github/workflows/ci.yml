@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  push:
+    branches: [master, nightly]
+  pull_request:
+
+jobs:
+  test:
+    name: py${{ matrix.python-version }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.12", "3.13"]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Byte-compile every module
+        run: python -m compileall -q .
+
+      - name: Cog load smoke test
+        env:
+          BOT_TOKEN: ci-placeholder-token
+          APPWRITE_ENDPOINT: https://appwrite.alibks.dev/v1
+          APPWRITE_PROJECT_ID: robotics-ops
+          APPWRITE_DATABASE_ID: robotics_ops
+          APPWRITE_API_KEY: ci-placeholder-key
+          PORT: "8080"
+        run: python scripts/smoke_test.py
+
+      - name: mc-link crypto tests (hermetic)
+        run: python scripts/test_mclink.py

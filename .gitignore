@@ -1,9 +1,19 @@
 # Environment & secrets
 .env
+.env.bak-*
+.restart-ack.json
+
+# YouTube login cookies (exported session — treat like a password)
+cookies.txt
+*_cookies.txt
 
 # Python artifacts
 __pycache__/
 *.pyc
+
+# Virtual environments
+.venv/
+venv/
 
 # IDE
 .idea/
